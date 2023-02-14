@@ -1,0 +1,54 @@
+@mixin scrollbars(
+  $size,
+  $foreground-color,
+  $background-color: mix($foreground-color, white, 50%)
+) {
+  // For Google Chrome
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $foreground-color;
+    border-radius: $size;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  // For Internet Explorer
+  & {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding: 0 5px;
+  margin-top: 25px;
+}
+
+.mostPopularText {
+  font-size: 1.3rem;
+  background-color: rgb(144, 204, 204);
+  border-radius: 20px;
+  border: 1px solid rgb(105, 169, 173);
+  padding: 4px 10px;
+}
+
+.cardsView {
+  display: flex;
+  margin-top: 2px;
+  padding: 0 5px;
+  width: 100%;
+  overflow: auto;
+  background-color: rgb(161, 206, 195);
+  border-radius: 10px;
+  @include scrollbars(0.6em, slategray);
+}

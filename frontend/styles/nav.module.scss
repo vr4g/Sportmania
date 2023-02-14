@@ -1,0 +1,101 @@
+$nav-bg-color: rgb(35, 31, 66);
+$nav-bg-color-secondary: rgb(73, 66, 122);
+$nav-text-color: rgb(194, 194, 194);
+$button-color: rgb(224, 224, 224);
+$button-color-hover: rgb(32, 31, 31);
+$button-text-color-hover: rgb(255, 255, 255);
+$profile-btn-bg-color: rgb(119, 119, 119);
+$profile-btn-bg-color-hover: rgb(233, 233, 233);
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.links {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.link {
+  width: 180px;
+  //background-color: $button-color;
+  color: $button-text-color-hover;
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 2px 0px;
+  padding: 5px 0px;
+  &:hover {
+    background-color: $nav-bg-color-secondary;
+    color: $button-text-color-hover;
+    transition: 0.3s;
+  }
+  &:active {
+    background-color: $nav-bg-color-secondary;
+    color: $button-text-color-hover;
+  }
+}
+
+.linkProfile {
+  @extend .link;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+
+.profile {
+  font-size: 1.1rem;
+  padding: 0 5px;
+}
+
+.componentContainer {
+  width: 100vw;
+  height: calc(100vh - 70px);
+  background-color: lightblue;
+}
+
+.search {
+  width: 200px;
+  height: 35px;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  background-color: rgb(21, 6, 48);
+  color: white;
+  &:focus {
+    outline: none;
+    background-color: rgb(0, 0, 0);
+    color: white;
+  }
+  &::placeholder {
+    color: white;
+  }
+}
+
+.nav {
+  display: flex;
+  height: 70px;
+  width: 100vw;
+  background-color: $nav-bg-color;
+  padding: 0 0;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  color: $nav-text-color;
+  font-size: 2rem;
+  margin-left: 20px;
+  letter-spacing: 0.2rem;
+}
+
+.logout {
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+}
