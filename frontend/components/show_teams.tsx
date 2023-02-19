@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaArrowCircleDown } from "react-icons/fa";
 import styles from "../styles/show_teams.module.scss";
 import SportsMapping from "./sports_mapping";
 
@@ -8,11 +9,35 @@ type Props = {
 };
 
 const ShowTeams = ({ data, textInfo }: Props) => {
+  const [showData, setShowData] = useState<boolean>(false);
+
+  const handleToggle = () => {
+    setShowData(!showData);
+  };
+
   return (
     <div className={styles.main}>
-      <span className={styles.mostPopularText}>{textInfo}</span>
-      <div className={styles.cardsView}>
-        <SportsMapping sportList={data} />
+      <span onClick={handleToggle} className={styles.mostPopularText}>
+        {textInfo}{" "}
+        <div className={styles.arrowStyle}>
+          <FaArrowCircleDown
+            className={showData ? styles.showDataArrow : styles.hideDataArrow}
+            color="#18792A"
+            size={25}
+          />
+        </div>
+      </span>
+
+      <div
+        className={`${styles.cardsViewRow} ${
+          showData ? styles.showData : styles.hideData
+        }`}
+      >
+        {data.length !== 0 ? (
+          <SportsMapping sportList={data} />
+        ) : (
+          <span className={styles.noData}>nema sportova u ovoj kategoriji</span>
+        )}
       </div>
     </div>
   );

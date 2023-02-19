@@ -5,10 +5,9 @@ import useStore from "../store/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Navigation from "../components/navigation";
-import Router from "next/router";
 import SignupLogin from "../components/signup_login";
 
-export default function App({ Component, pageProps, router }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   let authenticated = useStore<any>((state) => state);
   const [userData, setUserData] = useState(authenticated.user);
   axios.defaults.withCredentials = true;
@@ -28,6 +27,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
       }
     );
 
+    if (accessToken.data.message === "Unathorized") {
+      return;
+    }
+
     if (accessToken.data) {
       let tokenExpire = new Date();
       useStore.setState({
@@ -38,7 +41,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
       });
       return;
     }
-
     <SignupLogin />;
   };
 
@@ -54,21 +56,4 @@ export default function App({ Component, pageProps, router }: AppProps) {
       </div>
     </div>
   );
-
-  /*   return (
-    <>
-      {authenticated.auth ? (
-        <>
-          <div className={styles.main}>
-            <Navigation />
-            <div className={styles.componentContainer}>
-              <Component {...pageProps} />
-            </div>
-          </div>
-        </>
-      ) : (
-        <SignupLogin />
-      )}
-    </>
-  ); */
 }

@@ -37,17 +37,27 @@ const Mine = () => {
   useEffect(() => {
     getSports();
     getCheckedSports();
+    console.log(data);
+    console.log(checkedData);
   }, []);
 
   return (
     <div className={styles.main}>
-      <div>
+      <div className={styles.groupBorderCreated}>
         <h2>Moji kreirani timovi</h2>
-        <SportsMapping sportList={data} />
+        {data.length !== 0 ? (
+          <SportsMapping sportList={data} />
+        ) : (
+          <span className={styles.noDataInfo}>Nemate kreiranih timova</span>
+        )}
       </div>
-      <div>
+      <div className={styles.groupBorderChecked}>
         <h2>Sportovi na koje sam prijavljen</h2>
-        <SportsMapping sportList={checkedData} />
+        {checkedData.length !== 0 ? (
+          <SportsMapping sportList={checkedData} />
+        ) : (
+          <span className={styles.noDataInfo}>Niste prijavljeni na sport</span>
+        )}
       </div>
     </div>
   );

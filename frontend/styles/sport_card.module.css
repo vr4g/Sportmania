@@ -1,0 +1,118 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  margin: 10px 5px;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.sportTitle {
+  width: 100%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  border-radius: 25px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #3f3f3f;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.content p {
+  display: flex;
+  font-size: 1.2rem;
+  margin: 3px 0;
+  padding: 0;
+}
+
+.group {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #8f8f8f;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.detail {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.green {
+  color: #3cb371;
+}
+
+.red {
+  color: #ff6347;
+}
+
+.checkInButton {
+  padding: 0.1rem 0;
+  border: 2px solid #4caf50;
+  border-radius: 999px;
+  color: #4caf50;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.checkInButtonDisabled {
+  padding: 0.1rem 0;
+  border: 2px solid #616161;
+  border-radius: 999px;
+  color: #616161;
+  font-size: 1.2rem;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.checkInButtonFull {
+  padding: 0.1rem 0;
+  border: 2px solid #b60000;
+  border-radius: 999px;
+  color: #b60000;
+  font-size: 1.2rem;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.checkInButton:hover {
+  background-color: #4caf50;
+  color: #fff;
+}

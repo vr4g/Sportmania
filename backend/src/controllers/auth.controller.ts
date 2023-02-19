@@ -18,11 +18,10 @@ export const login = async (req: Request, res: Response) => {
       const user = data.rows;
       if (user.length === 0) {
         res.status(400).json({
-          message: "User is not registered, Sign up",
+          message: "Login failed",
         });
         return;
       }
-      console.log(data.rows[0].user_id);
       const userId = data.rows[0].user_id;
       bcrypt.compare(password, user[0].password, async (err, result) => {
         if (err) {
@@ -33,7 +32,7 @@ export const login = async (req: Request, res: Response) => {
         }
         if (!result) {
           res.status(400).json({
-            message: "Enter correct password",
+            message: "Login failed",
           });
           return;
         }
@@ -68,7 +67,7 @@ export const login = async (req: Request, res: Response) => {
           maxAge: 30 * 24 * 60 * 60 * 1000,
         });
 
-        const data = await client.query(
+        /*         const data = await client.query(
           "UPDATE users SET refresh_token = $1, refresh_token_created_at = $2, refresh_token_expire = $3  WHERE email = $4",
           [
             refresh_token,
@@ -76,7 +75,7 @@ export const login = async (req: Request, res: Response) => {
             refresh_token_expire_date,
             email,
           ]
-        );
+        ); */
 
         res.status(200).json({
           message: "User signed in",
@@ -123,7 +122,6 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (err: any) => {
       if (err) {
-        return res.status(406).json({ message: "Unauthorized" });
       } else {
         const accessToken = jwt.sign(
           {
@@ -136,7 +134,6 @@ export const refreshToken = async (req: Request, res: Response) => {
       }
     });
   } else {
-    return res.status(406).json({ message: "Unauthorized" });
   }
 };
 

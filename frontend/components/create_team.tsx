@@ -1,9 +1,10 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import useStore from "../store/store";
 import styles from "../styles/create_team.module.scss";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { useRouter } from "next/router";
 
 const CreateTeam = ({ setCreateNew }: any) => {
   const [sport, setSport] = useState<String>("");
@@ -11,8 +12,43 @@ const CreateTeam = ({ setCreateNew }: any) => {
   const [location, setLocation] = useState<String>();
   const [additionalInfo, setAdditionalInfo] = useState<String>();
   const [date, setDate] = useState<Date>();
+  const [showError, setShowError] = useState<boolean>(false);
   const [btnText, setBtnText] = useState<String>("");
   const authUser = useStore<any>((state) => state.user);
+  const [errorMsg, setErrorMsg] = useState<String>("");
+
+  const router = useRouter();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    if (!sport || !neededPlayers || !location || !date) {
+      setErrorMsg("Unesite sva obavezna polja!");
+      setShowError(true);
+      return;
+    }
+
+    const today = new Date();
+    if (date < today) {
+      setErrorMsg("Krivi datum");
+      setShowError(true);
+      return;
+    }
+    setShowError(false);
+
+    addTeam();
+  };
+
+  useEffect(() => {
+    let timeout: any;
+    if (showPopup) {
+      timeout = setTimeout(() => {
+        setShowPopup(false);
+        router.push("/activity");
+      }, 1500);
+    }
+    return () => clearTimeout(timeout);
+  }, [showPopup]);
 
   const addTeam = async () => {
     const options = {
@@ -25,9 +61,9 @@ const CreateTeam = ({ setCreateNew }: any) => {
         datetime: date,
         playerRequired: neededPlayers,
         location: location,
-        checked_users: authUser.user_id,
+        checked_users: localStorage.getItem("userId"),
         description: additionalInfo,
-        userId: authUser.user_id,
+        userId: localStorage.getItem("userId"),
       },
     };
     const response = await axios.post(
@@ -35,6 +71,9 @@ const CreateTeam = ({ setCreateNew }: any) => {
       {},
       options
     );
+    if (response.data.message === "Success") {
+      setShowPopup(true);
+    }
   };
 
   return (
@@ -42,21 +81,18 @@ const CreateTeam = ({ setCreateNew }: any) => {
       <>
         <div
           className={styles.backBtn}
-          onMouseEnter={() => setBtnText("Natrag")}
-          onMouseLeave={() => setBtnText("")}
           id="back"
           onClick={() => setCreateNew(false)}
         >
           <IoArrowBackCircle size="25" color="white" />
           {btnText}
         </div>
-        <form onSubmit={addTeam} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <select
             className={styles.dropdown}
-            required
             onChange={(sport) => setSport(sport.target.value)}
           >
-            <option value="">Odaberi sport</option>
+            <option value="">Odaberi sport (obavezno)</option>
             <option value="tenis">Tenis</option>
             <option value="nogomet">Nogomet</option>
             <option value="košarka">Košarka</option>
@@ -65,34 +101,46 @@ const CreateTeam = ({ setCreateNew }: any) => {
             <option value="squash">Squash</option>
           </select>
           <input
+            value={neededPlayers}
+            className={styles.inputField}
             type="number"
-            placeholder="Potrebno igrača ( uključujući kreatora )"
+            placeholder="Koliko igrača trebate (obavezno)"
             onChange={(e) => setNeededPlayers(e.target.valueAsNumber)}
-            required
           ></input>
           <input
+            className={styles.inputField}
             type="text"
-            placeholder="Lokacija odvijanja aktivnosti"
-            required
+            placeholder="Lokacija odvijanja aktivnosti (obavezno)"
             onChange={(e) => setLocation(e.target.value)}
           ></input>
-          <label>Datum i vrijeme aktivnosti</label>
+
+          <label>Datum i vrijeme aktivnosti (obavezno)</label>
           <input
+            className={styles.dateTimeField}
             type="datetime-local"
-            placeholder="Datum aktivnosti"
-            required
+            placeholder="Datum aktivnosti "
             onChange={(date) => setDate(new Date(date.target.value))}
           ></input>
           <input
+            className={styles.inputField}
             type="text"
-            placeholder="Dodatne informacije (npr. Treba lopta, može i igrač više)"
+            placeholder="Dodatne informacije"
             onChange={(info) => setAdditionalInfo(info.target.value)}
           ></input>
-          <input type="submit" value="Kreiraj"></input>
+          {showError && <span className={styles.errorMsg}>{errorMsg}</span>}
+          {showPopup && (
+            <div className={styles.successMessage}>
+              Uspješno ste kreirali svoj tim
+            </div>
+          )}
+          <input
+            className={styles.submitBtn}
+            type="submit"
+            value="Kreiraj"
+          ></input>
         </form>
       </>
     </div>
   );
 };
-
 export default CreateTeam;

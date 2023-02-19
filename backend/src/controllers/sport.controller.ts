@@ -9,10 +9,10 @@ export const loadSummary = async (req: Request, res: Response) => {
   try {
     pool.connect(async (error, client, release) => {
       const onePlayerMissing = await client.query(
-        "SELECT * FROM sports WHERE players_required - players_interested = 1"
+        "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id WHERE players_required - players_interested = 1"
       );
       const thisWeek = await client.query(
-        "SELECT * FROM sports WHERE datetime > current_date - interval '7days'"
+        "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id WHERE datetime BETWEEN current_date AND current_date + INTERVAL '1 WEEK'"
       );
       res
         .status(200)
@@ -24,12 +24,13 @@ export const loadSummary = async (req: Request, res: Response) => {
     catchError;
   }
 };
+
 export const getSport = async (req: Request, res: Response) => {
   const { author } = req.query;
   try {
     pool.connect(async (error, client, release) => {
       const data = await client.query(
-        "SELECT * FROM sports WHERE user_id = $1",
+        "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id WHERE sports.user_id = $1",
         [author]
       );
       res.status(200).json(data.rows);
@@ -46,7 +47,7 @@ export const getCheckedSports = async (req: Request, res: Response) => {
   try {
     pool.connect(async (error, client, release) => {
       const data = await client.query(
-        "SELECT * FROM sports WHERE $1 = any (checked_users)",
+        "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id WHERE $1 = any (checked_users)",
         [author]
       );
       res.status(200).json(data.rows);
@@ -61,7 +62,9 @@ export const getCheckedSports = async (req: Request, res: Response) => {
 export const getAllTeams = async (req: Request, res: Response) => {
   try {
     pool.connect(async (error, client, release) => {
-      const data = await client.query("SELECT * FROM sports");
+      const data = await client.query(
+        "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id"
+      );
 
       res.status(200).json(data.rows);
       release();
@@ -87,7 +90,7 @@ export const addSport = async (req: Request, res: Response) => {
         [sportName, playerRequired, location, datetime, description, userId]
       );
 
-      res.status(200).json(data.rows);
+      res.status(200).json({ message: "Success" });
       release();
       return;
     });

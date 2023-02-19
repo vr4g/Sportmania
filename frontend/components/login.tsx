@@ -38,25 +38,20 @@ const Login = () => {
         localStorage.setItem("userId", response.data.user[0].user_id);
       }
     } catch (error: any) {
+      if (error.response.data.message === "Both fields are required") {
+        setErrorMsg("Oba polja obavezna");
+        return;
+      }
+      if (error.response.data.message === "Login failed") {
+        setErrorMsg("Netocni podaci za prijavu");
+        return;
+      }
       if ((error.message = "Network Error")) {
         setErrorMsg("Server down");
         return;
       }
       if (error.response.status === 500) {
         setErrorMsg("DB Error");
-        return;
-      }
-      if (error.response.data.message === "Both fields are required") {
-        setErrorMsg("Oba polja obavezna");
-        return;
-      }
-
-      if (error.response.data.message === "User is not registered, Sign up") {
-        setErrorMsg("Ne postoji korisnik, registrirajte se");
-        return;
-      }
-      if (error.response.data.message === "Enter correct password") {
-        setErrorMsg("Netocni podaci za login");
         return;
       }
     }

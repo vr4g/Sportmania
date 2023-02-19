@@ -29,6 +29,7 @@ export default function Home() {
     setOnePlayer(res.onePlayer);
     setThisWeek(res.thisWeek);
     setShowAll(resp);
+    console.log(showAll);
   };
 
   return useStore.getState().auth ? (
@@ -39,15 +40,15 @@ export default function Home() {
         </>
       ) : (
         <>
-          <div
+          <button
             className={styles.btn}
             onClick={() => setCreateNew((curr) => !curr)}
           >
-            Kreiraj tim
-          </div>
-          <ShowTeams data={thisWeek} textInfo={"Događaji ovaj tjedan"} />
+            Kreiraj svoj tim
+          </button>
+          <ShowTeams data={thisWeek} textInfo={"Događaji sljedećih 7 dana"} />
           <ShowTeams data={onePlayer} textInfo={"Fali još 1 igrač"} />
-          {/* <ShowTeams data={showAll} textInfo={"Sve"} /> */}
+          <ShowTeams data={showAll} textInfo={"Svi sportovi"} />
         </>
       )}
     </div>
