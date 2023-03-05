@@ -112,6 +112,27 @@
   font-weight: bold;
 }
 
+.checkInButtonFull:hover {
+  cursor: not-allowed;
+}
+
+.checkOutButton {
+  padding: 0.1rem 0;
+  border: 2px solid #4f00b6;
+  border-radius: 999px;
+  color: #0003b6;
+  font-size: 1.2rem;
+  margin-top: 5px;
+  font-weight: bold;
+}
+.checkOutButton:hover {
+  cursor: pointer;
+  background-color: #0003b6;
+  border: 2px solid #0003b6;
+  color: #fafaff;
+  transition: 0.4s;
+}
+
 .checkInButton:hover {
   background-color: #4caf50;
   color: #fff;

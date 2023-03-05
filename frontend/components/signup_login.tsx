@@ -9,41 +9,44 @@ const SignupLogin = ({ setAuth }: any) => {
   return (
     <div className={styles.main}>
       <h1 className={styles.heading}>Sport buddy</h1>
+      <div className={styles.slik}></div>
       <div className={styles.container}>
-        <h2 className={styles.info}>{login ? "Prijava" : "Registracija"}</h2>
+        <h2 className={styles.info}>
+          {login ? "Prijavi se" : "Registriraj se"}
+        </h2>
         <div className={styles.form}>
-          {login ? (
-            <>
-              <Login />
-              <div className={styles.bottomText}>
-                Nemate račun?
-                <span
-                  className={styles.bottomLink}
-                  onClick={() => {
-                    setLogin((current) => !current);
-                  }}
-                >
-                  Registriraj se
-                </span>
-              </div>
-            </>
-          ) : (
-            <>
-              <Register />
-
-              <div className={styles.bottomText}>
-                Imate račun?{" "}
-                <span
-                  className={styles.bottomLink}
-                  onClick={() => {
-                    setLogin((current) => !current);
-                  }}
-                >
-                  Prijavi se
-                </span>
-              </div>
-            </>
-          )}
+          <div
+            className={login ? styles.formDivActive : styles.formDivInactive}
+          >
+            <Login />
+            <div className={styles.bottomText}>
+              Nemate račun?
+              <span
+                className={styles.bottomLink}
+                onClick={() => {
+                  setLogin((current) => !current);
+                }}
+              >
+                Registriraj se
+              </span>
+            </div>
+          </div>
+          <div
+            className={!login ? styles.formDivActive : styles.formDivInactive}
+          >
+            <Register />
+            <div className={styles.bottomText}>
+              Imate račun?{" "}
+              <span
+                className={styles.bottomLink}
+                onClick={() => {
+                  setLogin((current) => !current);
+                }}
+              >
+                Prijava
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

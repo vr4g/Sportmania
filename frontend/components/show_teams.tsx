@@ -9,7 +9,7 @@ type Props = {
 };
 
 const ShowTeams = ({ data, textInfo }: Props) => {
-  const [showData, setShowData] = useState<boolean>(false);
+  const [showData, setShowData] = useState<boolean>(true);
 
   const handleToggle = () => {
     setShowData(!showData);
@@ -22,7 +22,7 @@ const ShowTeams = ({ data, textInfo }: Props) => {
         <div className={styles.arrowStyle}>
           <FaArrowCircleDown
             className={showData ? styles.showDataArrow : styles.hideDataArrow}
-            color="#18792A"
+            color="#fff"
             size={25}
           />
         </div>

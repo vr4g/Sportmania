@@ -52,10 +52,7 @@ const CreateTeam = ({ setCreateNew }: any) => {
 
   const addTeam = async () => {
     const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      withCredentials: true,
       params: {
         sportName: sport,
         datetime: date,
@@ -67,7 +64,7 @@ const CreateTeam = ({ setCreateNew }: any) => {
       },
     };
     const response = await axios.post(
-      "http://localhost:5000/api/sport/sport",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sport/sport`,
       {},
       options
     );

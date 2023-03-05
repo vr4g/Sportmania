@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import useStore from "../store/store";
+import styles from "../styles/signuplogin.module.scss";
 
 const Login = () => {
   const [errorMsg, setErrorMsg] = useState<String>("");
@@ -17,12 +18,12 @@ const Login = () => {
         },
       };
       const response = await axios.post(
-        "http://localhost:5000/api/user/login",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/login`,
         {
           email: email,
           password: password,
         },
-        options
+        { withCredentials: true }
       );
       if (response.data) {
         setErrorMsg("");
@@ -61,21 +62,25 @@ const Login = () => {
     <>
       <span>{errorMsg}</span>
       <form onSubmit={onSubmitLogin}>
-        <input
-          type="text"
-          placeholder="Email"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        ></input>
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        ></input>
-        <button type="submit">Prijavi se</button>
+        <div className={styles.groupStyle}>
+          <label className={styles.label}>Email</label>
+          <input
+            type="text"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          ></input>
+        </div>
+        <div className={styles.groupStyle}>
+          <label className={styles.label}>Password</label>
+          <input
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          ></input>
+        </div>
+        <button type="submit">Prijava</button>
       </form>
     </>
   );

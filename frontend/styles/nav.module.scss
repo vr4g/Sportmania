@@ -67,49 +67,8 @@ $nav-height: 70px;
   .hamburger {
     display: none;
     cursor: pointer;
-
     svg {
       font-size: 2.5rem;
-    }
-  }
-
-  &.showMenu {
-    .navLinks {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: $nav-height;
-      left: 0;
-      width: 100%;
-      background-color: $primary-color;
-      transform: translateY(-100%);
-      transition: transform 0.5s ease-in-out;
-
-      li {
-        margin: 1rem;
-      }
-
-      .navLink {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 0.5rem;
-        border-radius: 5px;
-
-        svg {
-          margin-right: 0.5rem;
-          margin-bottom: 0;
-        }
-
-        span {
-          display: initial;
-        }
-      }
-    }
-
-    .active {
-      transform: translateY(0%);
     }
   }
 
@@ -122,10 +81,40 @@ $nav-height: 70px;
       display: block;
     }
 
-    &.showMenu {
-      .navLinks {
-        display: flex;
+    .active {
+      transform: rotate(90deg);
+      transition: 0.3s;
+    }
+    .inactive {
+      transform: rotate(0);
+      transition: 0.3s;
+    }
+
+    .showMenu {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 0;
+      top: 70px;
+      background-color: rgb(255, 255, 255);
+      padding: 0 5px;
+      max-height: fit-content;
+      max-width: 50%;
+      //min-width: fit-content;
+      transition: max-width 0.4s ease-in;
+
+      li {
+        width: 100%;
+        background-color: rgb(21, 75, 119);
+        margin-bottom: 5px;
+        border-radius: 7px;
       }
+    }
+
+    .hideMenu {
+      @extend .showMenu;
+      max-width: 0;
+      transition: max-width 0.4s ease-out;
     }
   }
 }

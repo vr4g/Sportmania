@@ -44,35 +44,37 @@ const SportCard = ({
   });
 
   const [checkedUsers, setCheckedUsers] = useState<number>(players_interested);
-  const [userChecked, setUserChecked] = useState<boolean>(false);
   const [canCheckIn, setCanCheckIn] = useState<boolean>(false);
+  const [mark, setMark] = useState<any>();
+
   let isCreator: boolean = false;
-  // let canCheckIn: boolean = false;
 
-  const joinTeam = async () => {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    setCheckedUsers((curr) => curr + 1);
-    //setUserChecked(true);
-    setCanCheckIn(false);
-
+  const checkout = async () => {
     const response = await axios.post(
-      "http://localhost:5000/api/sport/join",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sport/checkout`,
       {
         user_id: localStorage.getItem("userId"),
         sportId: sport_id,
-        sportName: sport_name,
-        playersCurrently: players_interested,
-        location: location,
-        datetime: datetime,
-        description: description,
+        playersCurrently: checkedUsers - 1,
       },
-      options
+      { withCredentials: true }
     );
+    setCanCheckIn(true);
+    setCheckedUsers((curr) => curr - 1);
+  };
+
+  const joinTeam = async () => {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sport/join`,
+      {
+        user_id: localStorage.getItem("userId"),
+        sportId: sport_id,
+        playersCurrently: checkedUsers + 1,
+      },
+      { withCredentials: true }
+    );
+    setCanCheckIn(false);
+    setCheckedUsers((curr) => curr + 1);
   };
 
   let bgColor;
@@ -99,8 +101,8 @@ const SportCard = ({
       bgColor = "#000";
   }
 
-  const groupInfo = `${players_interested} / ${players_required}`;
-  const hasGroupSpace = players_interested < players_required;
+  const groupInfo = `${checkedUsers} / ${players_required}`;
+  const hasGroupSpace = checkedUsers < players_required;
 
   if (user_id === JSON.parse(localStorage.getItem("userId")!)) {
     isCreator = true;
@@ -173,15 +175,17 @@ const SportCard = ({
           )}
         </p>
       </div>
-      {!isCreator && canCheckIn ? (
+      {!isCreator && canCheckIn && players_required !== players_interested ? (
         <button className={styles.checkInButton} onClick={joinTeam}>
           Prijavi se
         </button>
       ) : players_required === players_interested ? (
         <button className={styles.checkInButtonFull}>Sport popunjen</button>
+      ) : isCreator ? (
+        <button className={styles.checkInButtonDisabled}>Moj sport</button>
       ) : (
-        <button className={styles.checkInButtonDisabled}>
-          {isCreator ? "Moj sport" : "Prijavljen"}
+        <button className={styles.checkOutButton} onClick={checkout}>
+          Odjavi se
         </button>
       )}
     </div>

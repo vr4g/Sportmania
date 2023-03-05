@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/nav.module.scss";
-import navStyles from "../styles/nav.module.scss";
 import Link from "next/link";
-import { CgProfile } from "react-icons/cg";
 import axios from "axios";
 import useStore from "../store/store";
 import SignupLogin from "./signup_login";
@@ -22,8 +20,11 @@ const Navigation = () => {
   };
 
   const logout = async () => {
-    const res = await axios.post("http://localhost:5000/api/user/signout");
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/signout`
+    );
     if (res.data.message === "Signed out") {
+      localStorage.removeItem("userId");
       useStore.setState({
         auth: false,
         user: [],
@@ -37,7 +38,11 @@ const Navigation = () => {
   return (
     <nav className={styles.nav}>
       <div className={styles.navLogo}>Sportmania</div>
-      <ul className={`${styles.navLinks} ${showMenu ? styles.showMenu : ""}`}>
+      <ul
+        className={`${styles.navLinks} ${
+          showMenu ? styles.showMenu : styles.hideMenu
+        }`}
+      >
         <li>
           <Link className={styles.navLink} href="/">
             <FaHome />
@@ -64,7 +69,9 @@ const Navigation = () => {
         </li>
       </ul>
       <div
-        className={`${styles.hamburger} ${showMenu ? styles.active : ""}`}
+        className={`${styles.hamburger} ${
+          showMenu ? styles.active : styles.inactive
+        }`}
         onClick={handleMenuClick}
       >
         <FaBars />

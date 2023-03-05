@@ -5,6 +5,7 @@ import { pool } from "../utils/dbConnect";
 export const registerUser = async (req: Request, res: Response) => {
   const { password, firstname, lastname, birthday, gender, contact } = req.body;
 
+  console.log("register User");
   const email = req.body.email.toLowerCase();
   if (!email || !password) {
     return res.status(400).send({ message: "All fields are required" });

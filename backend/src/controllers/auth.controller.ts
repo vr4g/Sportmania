@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const login = async (req: Request, res: Response) => {
+  console.log("login");
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400).json({ message: "Both fields are required" });
@@ -67,16 +68,6 @@ export const login = async (req: Request, res: Response) => {
           maxAge: 30 * 24 * 60 * 60 * 1000,
         });
 
-        /*         const data = await client.query(
-          "UPDATE users SET refresh_token = $1, refresh_token_created_at = $2, refresh_token_expire = $3  WHERE email = $4",
-          [
-            refresh_token,
-            refresh_token_created_at,
-            refresh_token_expire_date,
-            email,
-          ]
-        ); */
-
         res.status(200).json({
           message: "User signed in",
           token: access_token,
@@ -130,6 +121,7 @@ export const refreshToken = async (req: Request, res: Response) => {
           process.env.JWT_SECRET,
           { expiresIn: "1h" }
         );
+
         return res.json(accessToken);
       }
     });

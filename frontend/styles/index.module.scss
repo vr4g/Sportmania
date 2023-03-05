@@ -126,3 +126,9 @@ $input-text-color: rgb(193, 235, 182);
     transition: 0.4s;
   }
 }
+
+.topButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

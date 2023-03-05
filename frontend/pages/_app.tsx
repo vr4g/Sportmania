@@ -13,18 +13,22 @@ export default function App({ Component, pageProps }: AppProps) {
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    if (!authenticated.auth) {
+    if (!authenticated.auth && localStorage.getItem("userId")) {
       refreshToken();
     }
   }, [authenticated]);
 
   const refreshToken = async () => {
+    const options = {
+      withCredentials: true,
+    };
     const userId = localStorage.getItem("userId");
     const accessToken = await axios.post(
-      "http://localhost:5000/api/user/refresh_token",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/refresh_token`,
       {
         user_id: userId,
-      }
+      },
+      options
     );
 
     if (accessToken.data.message === "Unathorized") {
@@ -50,6 +54,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <div className={styles.main}>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap"
+        rel="stylesheet"
+      />
       <Navigation />
       <div className={styles.componentContainer}>
         <Component {...pageProps} />

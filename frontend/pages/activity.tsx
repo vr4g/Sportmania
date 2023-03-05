@@ -10,10 +10,12 @@ const Mine = () => {
   const authState = useStore<any>((state) => state.user);
 
   const getSports = async () => {
-    const response = await axios.get("http://localhost:5000/api/sport/sport", {
-      params: { author: localStorage.getItem("userId") },
-    });
-    console.log(response.data);
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sport/sport`,
+      {
+        params: { user_id: localStorage.getItem("userId") },
+      }
+    );
     if (response.data) {
       setData(response.data);
     }
@@ -21,13 +23,11 @@ const Mine = () => {
 
   const getCheckedSports = async () => {
     const response = await axios.get(
-      "http://localhost:5000/api/sport/checked_sports",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sport/checked_sports`,
       {
-        params: { author: localStorage.getItem("userId") },
+        params: { user_id: localStorage.getItem("userId") },
       }
     );
-
-    console.log(response.data);
 
     if (response.data) {
       setCheckedData(response.data);
@@ -37,8 +37,6 @@ const Mine = () => {
   useEffect(() => {
     getSports();
     getCheckedSports();
-    console.log(data);
-    console.log(checkedData);
   }, []);
 
   return (

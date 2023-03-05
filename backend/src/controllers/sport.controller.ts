@@ -26,12 +26,13 @@ export const loadSummary = async (req: Request, res: Response) => {
 };
 
 export const getSport = async (req: Request, res: Response) => {
-  const { author } = req.query;
+  const { user_id } = req.query;
+  console.log("get Sport");
   try {
     pool.connect(async (error, client, release) => {
       const data = await client.query(
         "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id WHERE sports.user_id = $1",
-        [author]
+        [user_id]
       );
       res.status(200).json(data.rows);
       release();
@@ -43,12 +44,13 @@ export const getSport = async (req: Request, res: Response) => {
 };
 
 export const getCheckedSports = async (req: Request, res: Response) => {
-  const { author } = req.query;
+  const { user_id } = req.query;
+  console.log("get checked Sports");
   try {
     pool.connect(async (error, client, release) => {
       const data = await client.query(
         "SELECT * FROM sports LEFT JOIN users ON sports.user_id = users.user_id WHERE $1 = any (checked_users)",
-        [author]
+        [user_id]
       );
       res.status(200).json(data.rows);
       release();
@@ -60,6 +62,7 @@ export const getCheckedSports = async (req: Request, res: Response) => {
 };
 
 export const getAllTeams = async (req: Request, res: Response) => {
+  console.log("get all teams");
   try {
     pool.connect(async (error, client, release) => {
       const data = await client.query(
@@ -78,7 +81,7 @@ export const getAllTeams = async (req: Request, res: Response) => {
 export const addSport = async (req: Request, res: Response) => {
   const { userId, sportName, playerRequired, location, datetime, description } =
     req.query;
-
+  console.log("add Sport");
   try {
     const response = pool.connect(async (error, client, release) => {
       if (error) {
@@ -92,7 +95,6 @@ export const addSport = async (req: Request, res: Response) => {
 
       res.status(200).json({ message: "Success" });
       release();
-      return;
     });
   } catch (error) {
     console.log(error);
@@ -101,29 +103,52 @@ export const addSport = async (req: Request, res: Response) => {
 };
 
 export const joinTeam = async (req: Request, res: Response) => {
-  const {
-    user_id,
-    sportId,
-    sportName,
-    playersCurrently,
-    location,
-    datetime,
-    description,
-  } = req.body;
+  const { user_id, sportId, playersCurrently } = req.body;
+
+  console.log("join Team");
+  try {
+    const response = pool.connect(async (error, client, release) => {
+      const data = await client.query(
+        "UPDATE sports SET players_interested=$1, checked_users = array_append(checked_users, $2) WHERE sport_id=$3",
+        [playersCurrently /* + 1 */, user_id, sportId]
+      );
+
+      res.status(200).json(data.rows);
+      release();
+    });
+  } catch (error) {
+    console.log(error);
+    catchError;
+  }
+};
+export const checkout = async (req: Request, res: Response) => {
+  const { user_id, sportId, playersCurrently } = req.body;
+
+  console.log("checkout");
+  try {
+    const response = pool.connect(async (error, client, release) => {
+      const data = await client.query(
+        "UPDATE sports SET players_interested=$1, checked_users = array_remove(checked_users, $2) WHERE sport_id=$3",
+        [playersCurrently, user_id, sportId]
+      );
+
+      res.status(200).json(data.rows);
+      release();
+    });
+  } catch (error) {
+    console.log(error);
+    catchError;
+  }
+};
+
+export const filterSport = async (req: Request, res: Response) => {
+  const { filter } = req.query;
 
   try {
     const response = pool.connect(async (error, client, release) => {
       const data = await client.query(
-        "UPDATE sports SET sport_name=$1, players_interested=$2, location=$3, datetime=$4, description=$5, checked_users = array_append(checked_users, $7) WHERE sport_id=$6",
-        [
-          sportName,
-          playersCurrently + 1,
-          location,
-          datetime,
-          description,
-          sportId,
-          user_id,
-        ]
+        "SELECT * FROM sports WHERE sport_name=$1",
+        [filter]
       );
 
       res.status(200).json(data.rows);

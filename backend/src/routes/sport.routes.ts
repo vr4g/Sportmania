@@ -13,6 +13,8 @@ router.get(
 );
 router.post("/sport", bodyParser.json(), sportController.addSport);
 router.post("/join", bodyParser.json(), sportController.joinTeam);
+router.post("/checkout", bodyParser.json(), sportController.checkout);
 router.get("/allteams", bodyParser.json(), sportController.getAllTeams);
+router.get("/filter", bodyParser.json(), sportController.filterSport);
 
 export default router;
